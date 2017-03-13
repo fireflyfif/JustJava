@@ -72,15 +72,6 @@ public class MainActivity extends AppCompatActivity {
         boolean hasWhippedCream = whippedCreamCheckBox.isChecked();
         Log.v("MainActivity", "Has whipped cream: " + hasWhippedCream);
 
-        // If statement
-        if (hasWhippedCream) {
-
-            Log.v("MainActivity", "Add $1 to the Total price");
-        } else {
-            calculatePrice();
-            Log.v("MainActivity", "No additional amount added to the Total price.");
-        }
-
         // Figure out if the user wants chocolate topping
         CheckBox chocolateCheckBox = (CheckBox) findViewById(R.id.chocolate_check_box);
         boolean hasChocolate = chocolateCheckBox.isChecked();
@@ -89,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         EditText nameField = (EditText) findViewById(R.id.name_field);
         String yourName = nameField.getText().toString();
 
-        int price = calculatePrice();
+        int price = calculatePrice(hasWhippedCream, hasChocolate);
 
         String priceMessage = createOrderSummary(price, hasWhippedCream, hasChocolate, yourName);
         displayMessage(priceMessage);
@@ -106,26 +97,30 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Calculates the price of the order.
      *
+     * @param addWhippedCream is whether or not the user wants whipped cream
+     * @param addChocolate is whether or not the user wants chocolate
      * @return total price
      */
-    private int calculatePrice(){
-        CheckBox whippedCreamCheckBox = (CheckBox) findViewById(R.id.whipped_cream_check_box);
-        CheckBox chocolateCheckBox = (CheckBox) findViewById(R.id.chocolate_check_box);
-        if (whippedCreamCheckBox.isChecked() && (chocolateCheckBox.isChecked())){
-            return quantity * (5 + 1 + 2);
-        } else if ((whippedCreamCheckBox.isChecked()) && (!chocolateCheckBox.isChecked())){
+    private int calculatePrice(boolean addWhippedCream, boolean addChocolate){
+        // Price of one cup of coffee
+        int basePrice = 5;
+
+        // Add $1 if the user wants whipped cream
+        if (addWhippedCream){
             return quantity * (5 + 1);
-        } else if ((!whippedCreamCheckBox.isChecked()) && (chocolateCheckBox.isChecked())){
-            return quantity * (5 + 2);
-        } else {
-            return quantity * 5;
         }
 
+        // Add $2 if the user wants chocolate
+        if (addChocolate) {
+            return quantity * (5 + 2);
+        }
+
+        // Calculate the total order price by multiplying by quantity
+        return quantity * basePrice;
     }
 
 
-
-
+    
     /**
      * Create summary of the order.
      *
