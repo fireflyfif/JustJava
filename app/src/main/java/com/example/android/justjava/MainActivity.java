@@ -17,29 +17,34 @@ import java.text.NumberFormat;
  */
 public class MainActivity extends AppCompatActivity {
 
+    int quantity = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
 
-    /**
-     * This method is called when the order button is clicked.
-     */
-    public void submitOrder(View view) {
-        int quantity = 2;
-        display(quantity);
-        displayPrice(quantity * 5);
-    }
 
     public void increment(View view) {
-        int quantity = 3;
+        quantity = quantity + 1;
         display(quantity);
     }
 
     public void decrement(View view){
-        int quantity = 1;
+        quantity = quantity - 1;
         display(quantity);
+    }
+
+    /**
+     * This method is called when the order button is clicked.
+     */
+    public void submitOrder(View view) {
+        int price = quantity * 5;
+        String priceMessage = "Total: $" + price;
+        priceMessage = priceMessage + "\nThank you!";
+        //priceMessage = "Special price today:" + "Total of: $" + (price - 2);
+        displayMessage(priceMessage);
     }
 
     /**
@@ -57,4 +62,13 @@ public class MainActivity extends AppCompatActivity {
         TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
         priceTextView.setText(NumberFormat.getCurrencyInstance().format(number));
     }
+
+    /**
+     * This method displays the given text on the screen.
+     */
+    private void displayMessage(String message) {
+        TextView priceTextView = (TextView) findViewById(R.id.price_text_view);
+        priceTextView.setText(message);
+    }
+
 }
