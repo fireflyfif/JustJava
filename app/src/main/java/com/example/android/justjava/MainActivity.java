@@ -6,6 +6,8 @@ package com.example.android.justjava;
  * package com.example.android.justjava;
  */
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -76,11 +78,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * This method is called when the order button is clicked.
      */
     public void submitOrder(View view) {
+        // Find the user's name
+        EditText nameField = (EditText) findViewById(R.id.name_field);
+        String yourName = nameField.getText().toString();
+
+        // Figure out if the user wants whipped cream topping
         CheckBox whippedCreamCheckBox = (CheckBox) findViewById(R.id.whipped_cream_check_box);
         boolean hasWhippedCream = whippedCreamCheckBox.isChecked();
         Log.v("MainActivity", "Has whipped cream: " + hasWhippedCream);
@@ -90,13 +96,20 @@ public class MainActivity extends AppCompatActivity {
         boolean hasChocolate = chocolateCheckBox.isChecked();
         Log.v("MainActivity", "Has Chocolate: " + hasChocolate);
 
-        EditText nameField = (EditText) findViewById(R.id.name_field);
-        String yourName = nameField.getText().toString();
-
         int price = calculatePrice(hasWhippedCream, hasChocolate);
 
         String priceMessage = createOrderSummary(price, hasWhippedCream, hasChocolate, yourName);
-        displayMessage(priceMessage);
+//        displayMessage(priceMessage); // No longer need this display message
+
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto: fif.iva@gmail.com")); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_EMAIL, "To fif.iva@gmail.com");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "JustJava order for " + yourName);
+        intent.putExtra(Intent.EXTRA_TEXT, priceMessage);
+        if (intent.resolveActivity(getPackageManager()) != null) {
+            startActivity(intent);
+        }
+
     }
 
     /**
@@ -133,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     /**
      * Create summary of the order.
      *
@@ -143,7 +155,8 @@ public class MainActivity extends AppCompatActivity {
      * @param addName is the name of the user
      * @return text summary
      */
-    private String createOrderSummary(int price, boolean addWhippedCream, boolean addChocolate, String addName) {
+    private String createOrderSummary(int price, boolean addWhippedCream, boolean addChocolate,
+                                      String addName) {
 
         String priceMessage = "Name: " + addName;
         priceMessage += "\nAdd whipped cream? " + addWhippedCream;
@@ -155,13 +168,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * This method displays the given text on the screen.
-     */
-    private void displayMessage(String message) {
-        TextView orderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
-        orderSummaryTextView.setText(message);
-    }
-
+//    /**
+//     * This method displays the given text on the screen.
+//     */
+//    private void displayMessage(String message) {
+//        TextView orderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
+//        orderSummaryTextView.setText(message);
+//    }
 
 }
