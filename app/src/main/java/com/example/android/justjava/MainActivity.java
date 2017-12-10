@@ -6,8 +6,6 @@ package com.example.android.justjava;
  * package com.example.android.justjava;
  */
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -26,10 +24,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    // Check what is that int for
-    int myVariable;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        outState.putInt("myKey", myVariable);
+        outState.putInt("quantity", quantity);
     }
 
     // This should be a method for saving the state in Landscape mode. But it's not working
@@ -50,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        myVariable = savedInstanceState.getInt("myKey");
+        quantity = savedInstanceState.getInt("quantity");
     }
 
 
@@ -99,16 +93,16 @@ public class MainActivity extends AppCompatActivity {
         int price = calculatePrice(hasWhippedCream, hasChocolate);
 
         String priceMessage = createOrderSummary(price, hasWhippedCream, hasChocolate, yourName);
-//        displayMessage(priceMessage); // No longer need this display message
+        displayMessage(priceMessage); // No longer need this display message
 
-        Intent intent = new Intent(Intent.ACTION_SENDTO);
-        intent.setData(Uri.parse("mailto: fif.iva@gmail.com")); // only email apps should handle this
-        intent.putExtra(Intent.EXTRA_EMAIL, "To fif.iva@gmail.com");
-        intent.putExtra(Intent.EXTRA_SUBJECT, "JustJava order for " + yourName);
-        intent.putExtra(Intent.EXTRA_TEXT, priceMessage);
-        if (intent.resolveActivity(getPackageManager()) != null) {
-            startActivity(intent);
-        }
+//        Intent intent = new Intent(Intent.ACTION_SENDTO);
+//        intent.setData(Uri.parse("mailto: fif.iva@gmail.com")); // only email apps should handle this
+//        intent.putExtra(Intent.EXTRA_EMAIL, "To fif.iva@gmail.com");
+//        intent.putExtra(Intent.EXTRA_SUBJECT, "JustJava order for " + yourName);
+//        intent.putExtra(Intent.EXTRA_TEXT, priceMessage);
+//        if (intent.resolveActivity(getPackageManager()) != null) {
+//            startActivity(intent);
+//        }
 
     }
 
@@ -168,12 +162,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    /**
-//     * This method displays the given text on the screen.
-//     */
-//    private void displayMessage(String message) {
-//        TextView orderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
-//        orderSummaryTextView.setText(message);
-//    }
+    /**
+     * This method displays the given text on the screen.
+     */
+    private void displayMessage(String message) {
+        TextView orderSummaryTextView = (TextView) findViewById(R.id.order_summary_text_view);
+        orderSummaryTextView.setText(message);
+    }
 
 }
